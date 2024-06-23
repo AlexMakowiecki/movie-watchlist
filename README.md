@@ -5,6 +5,7 @@ This Solo Project was made to practice the interaction with APIs, in this case w
 
 ## Preview
 
+![movie-watchlist](https://github.com/AlexMakowiecki/movie-watchlist/assets/122258496/a091638a-b92a-4c24-9440-9116139171e8)
 
 
 ## About Scrimba
