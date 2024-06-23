@@ -25,7 +25,7 @@ async function handleMovieSearchSubmit(e) {
 
 async function getMoviesAddress() {
   const movieName = document.getElementById("movie-input").value
-  const searchResponse = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${movieName}`)
+  const searchResponse = await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&s=${movieName}`)
   const searchData = await searchResponse.json()
   if (searchData.Response.toLowerCase() === "false") throw new Error(searchData.Error)
   return searchData.Search;
@@ -33,21 +33,21 @@ async function getMoviesAddress() {
 
 async function renderMovies(moviesAddress) {
 
-  const localMoviesData = JSON.parse(localStorage.getItem("localMoviesData")) 
+  const localMoviesData = JSON.parse(localStorage.getItem("localMoviesData"))
 
   let movieListInnerHTML = ""
-  for (movieAddress of moviesAddress){
+  for (movieAddress of moviesAddress) {
     const movieData = await getMovieData(movieAddress.imdbID)
-    const { Title: title, Genre: genre, 
-            Plot: desc, Poster: img,
-            Runtime: duration, imdbRating: rating } = movieData;
+    const { Title: title, Genre: genre,
+      Plot: desc, Poster: img,
+      Runtime: duration, imdbRating: rating } = movieData;
 
-    
+
     let addButtonState = ""
     let removeButtonState = ""
-    const isMovieInLocalStorage = (localMoviesData) 
-                                  ? localMoviesData.some( localMovie => localMovie.imdbID === movieData.imdbID)
-                                  : null
+    const isMovieInLocalStorage = (localMoviesData)
+      ? localMoviesData.some(localMovie => localMovie.imdbID === movieData.imdbID)
+      : null
     if (isMovieInLocalStorage) addButtonState = "hidden"
     else removeButtonState = "hidden"
 
@@ -86,19 +86,19 @@ async function renderMovies(moviesAddress) {
 }
 
 async function getMovieData(movieId) {
-  const movieResponse = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&i=${movieId}`)
+  const movieResponse = await fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${movieId}`)
   const movieData = await movieResponse.json()
   if (movieData.Response.toLowerCase() === "false") throw new Error(searchData.Error)
   return movieData
 }
 
-function showMovieList(){
+function showMovieList() {
   const movieListPlaceholderEl = document.getElementById("movie-list-placeholder")
   movieListEl.removeAttribute("hidden")
   movieListPlaceholderEl.setAttribute("hidden", "true")
 }
 
-function showMovieListPlaceholder(content){
+function showMovieListPlaceholder(content) {
   const movieListPlaceholderEl = document.getElementById("movie-list-placeholder")
   movieListPlaceholderEl.innerHTML = content
   movieListPlaceholderEl.removeAttribute("hidden")
@@ -111,11 +111,11 @@ Handle of add/remove to watchlist button
 
 movieListEl.addEventListener("click", handleWatchlistButton)
 
-function handleWatchlistButton(e){
+function handleWatchlistButton(e) {
   const selectedElement = e.target
   if (selectedElement.dataset.group === "add-movie-button") {
     const selectedImdbID = e.target.dataset.imdbId
-    const selectedMovieData = currentMoviesInformation.find( movieData => movieData.imdbID === selectedImdbID)
+    const selectedMovieData = currentMoviesInformation.find(movieData => movieData.imdbID === selectedImdbID)
     const localMoviesData = JSON.parse(localStorage.getItem("localMoviesData")) || []
     localMoviesData.push(selectedMovieData)
     localStorage.setItem("localMoviesData", JSON.stringify(localMoviesData))
@@ -125,8 +125,8 @@ function handleWatchlistButton(e){
   else if (selectedElement.dataset.group === "remove-movie-button") {
     const selectedImdbID = e.target.dataset.imdbId
     const localMoviesData = JSON.parse(localStorage.getItem("localMoviesData"))
-    const updatedLocalMoviesData = localMoviesData.filter( movieData => movieData.imdbID !== selectedImdbID)
-    
+    const updatedLocalMoviesData = localMoviesData.filter(movieData => movieData.imdbID !== selectedImdbID)
+
     if (updatedLocalMoviesData.length === 0) localStorage.removeItem("localMoviesData")
     else localStorage.setItem("localMoviesData", JSON.stringify(updatedLocalMoviesData))
     selectedElement.classList.toggle("hidden")
