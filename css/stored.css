@@ -1,0 +1,10 @@
+.movie-list-placeholder a{
+  font-weight: 700;
+  color:#363636
+}
+
+@media (min-width: 1000px) {
+  .movie-list-placeholder a{
+    font-size: 1rem;
+  }
+}
